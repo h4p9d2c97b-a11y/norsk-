@@ -1,212 +1,410 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Norsk A1 — Інтерактивний тренажер</title>
+  <style>
+    :root {
+      --primary: #00205B;
+      --secondary: #BA0C2F;
+      --bg: #F4F6F9;
+      --card-bg: #FFFFFF;
+      --text: #2D3748;
+      --success: #28A745;
+      --danger: #DC3545;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: var(--bg);
-        color: var(--text);
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
 
     header {
-        text-align: center;
-        margin-bottom: 25px;
+      text-align: center;
+      margin-bottom: 25px;
     }
 
     h1 {
-        color: var(--primary);
-        margin-bottom: 5px;
+      color: var(--primary);
+      margin-bottom: 5px;
+      font-size: 1.8rem;
     }
 
     p.subtitle {
-        color: #666;
-        margin-top: 0;
+      color: #666;
+      margin-top: 0;
+      font-size: 0.95rem;
     }
 
     .nav-tabs {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .tab-btn {
-        padding: 10px 20px;
-        border: none;
-        background-color: #E2E8F0;
-        color: var(--text);
-        font-weight: bold;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
+      padding: 10px 20px;
+      border: none;
+      background-color: #E2E8F0;
+      color: var(--text);
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
     .tab-btn.active {
-        background-color: var(--primary);
-        color: white;
+      background-color: var(--primary);
+      color: white;
     }
 
     .section {
-        display: none;
-        width: 100%;
-        max-width: 600px;
+      display: none;
+      width: 100%;
+      max-width: 600px;
     }
 
     .section.active {
-        display: block;
+      display: block;
     }
 
-    /* --- FLASHCARDS --- */
+    /* FLASHCARDS */
     .card-container {
-        perspective: 1000px;
-        width: 100%;
-        height: 220px;
-        cursor: pointer;
+      perspective: 1000px;
+      width: 100%;
+      height: 220px;
+      cursor: pointer;
     }
 
     .card {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform-style: preserve-3d;
-        transition: transform 0.6s;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .card.flipped {
-        transform: rotateY(180deg);
+      transform: rotateY(180deg);
     }
 
     .card-front, .card-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-radius: 15px;
-        background: var(--card-bg);
-        padding: 20px;
-        box-sizing: border-box;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
+      background: var(--card-bg);
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .card-front {
-        border-top: 6px solid var(--primary);
+      border-top: 6px solid var(--primary);
     }
 
     .card-back {
-        background-color: #F0F4FF;
-        transform: rotateY(180deg);
-        border-top: 6px solid var(--secondary);
+      background-color: #F0F4FF;
+      transform: rotateY(180deg);
+      border-top: 6px solid var(--secondary);
     }
 
     .word {
-        font-size: 2rem;
-        font-weight: bold;
-        color: var(--primary);
-        margin-bottom: 10px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 10px;
     }
 
     .translation {
-        font-size: 1.5rem;
-        color: var(--secondary);
+      font-size: 1.5rem;
+      color: var(--secondary);
     }
 
     .hint {
-        font-size: 0.85rem;
-        color: #888;
-        position: absolute;
-        bottom: 15px;
+      font-size: 0.85rem;
+      color: #888;
+      position: absolute;
+      bottom: 15px;
     }
 
     .controls {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
     }
 
     .btn {
-        padding: 10px 20px;
-        border: none;
-        background: var(--primary);
-        color: white;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1rem;
+      padding: 10px 20px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
     }
 
-    /* --- QUIZ --- */
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* QUIZ */
     .quiz-card {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
     .options-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: 15px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
     }
 
     .option-btn {
-        padding: 12px;
-        border: 2px solid #E2E8F0;
-        background: white;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: all 0.2s;
+      padding: 12px;
+      border: 2px solid #E2E8F0;
+      background: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
     .option-btn.correct {
-        background-color: var(--success);
-        color: white;
-        border-color: var(--success);
+      background-color: var(--success);
+      color: white;
+      border-color: var(--success);
     }
 
     .option-btn.wrong {
-        background-color: var(--danger);
-        color: white;
-        border-color: var(--danger);
+      background-color: var(--danger);
+      color: white;
+      border-color: var(--danger);
     }
 
-    /* --- DICTIONARY --- */
+    /* DICTIONARY */
     .search-box {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #CBD5E0;
-        border-radius: 8px;
-        font-size: 1rem;
-        margin-bottom: 15px;
-        box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #CBD5E0;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 15px;
     }
 
     .dict-list {
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        max-height: 400px;
-        overflow-y: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-height: 400px;
+      overflow-y: auto;
     }
 
     .dict-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 12px 20px;
-        border-bottom: 1px solid #E2E8F0;
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid #E2E8F0;
     }
 
     .dict-item:last-child {
-        border-bottom: none;
+      border-bottom: none;
     }
 
     .norwegian-word {
-        font-weight: bold;
-        color: var(--primary);
+      font-weight: bold;
+      color: var(--primary);
     }
-</style>
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Norsk Leksjon 1-2</h1>
+    <p class="subtitle">Інтерактивний тренажер слів (A1)</p>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('cards')">Флеш-картки</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">Тест</button>
+    <button class="tab-btn" onclick="switchTab('dict')">Словник</button>
+  </div>
+
+  <!-- SECTION 1: FLASHCARDS -->
+  <div id="cards" class="section active">
+    <div class="card-container" onclick="flipCard()">
+      <div class="card" id="card">
+        <div class="card-front">
+          <div class="word" id="card-norwegian">...</div>
+          <div class="hint">Натисніть, щоб перевернути</div>
+        </div>
+        <div class="card-back">
+          <div class="translation" id="card-ukrainian">...</div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="prevCard()">Попередня</button>
+      <span id="card-progress" style="align-self: center; font-weight: bold;">1 / 10</span>
+      <button class="btn" onclick="nextCard()">Наступна</button>
+    </div>
+  </div>
+
+  <!-- SECTION 2: QUIZ -->
+  <div id="quiz" class="section">
+    <div class="quiz-card">
+      <h3 id="quiz-question">Як перекладається слово?</h3>
+      <div class="options-grid" id="options"></div>
+      <div style="margin-top: 15px; text-align: right; font-weight: bold;" id="quiz-score">Рахунок: 0</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: DICTIONARY -->
+  <div id="dict" class="section">
+    <input type="text" class="search-box" id="search" placeholder="Пошук слова..." oninput="filterDict()">
+    <div class="dict-list" id="dict-list"></div>
+  </div>
+
+  <script>
+    const vocabulary = [
+      { no: "Hei", uk: "Привіт" },
+      { no: "Ha det bra", uk: "До побачення" },
+      { no: "Takk", uk: "Дякую" },
+      { no: "Ja", uk: "Так" },
+      { no: "Nei", uk: "Ні" },
+      { no: "Jeg", uk: "Я" },
+      { no: "Du", uk: "Ти" },
+      { no: "Hva heter du?", uk: "Як тебя звати?" },
+      { no: "Jeg snakker norsk", uk: "Я розмовляю норвезькою" },
+      { no: "Hvordan går det?", uk: "Як справи?" }
+    ];
+
+    let currentCardIndex = 0;
+    let quizScore = 0;
+    let currentQuizWord = null;
+
+    // TAB SWITCHING
+    function switchTab(tabId) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+
+      if (tabId === 'quiz') startQuiz();
+    }
+
+    // FLASHCARDS
+    function updateCard() {
+      const cardEl = document.getElementById('card');
+      cardEl.classList.remove('flipped');
+      setTimeout(() => {
+        document.getElementById('card-norwegian').innerText = vocabulary[currentCardIndex].no;
+        document.getElementById('card-ukrainian').innerText = vocabulary[currentCardIndex].uk;
+        document.getElementById('card-progress').innerText = `${currentCardIndex + 1} / ${vocabulary.length}`;
+      }, 150);
+    }
+
+    function flipCard() {
+      document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+      currentCardIndex = (currentCardIndex + 1) % vocabulary.length;
+      updateCard();
+    }
+
+    function prevCard() {
+      currentCardIndex = (currentCardIndex - 1 + vocabulary.length) % vocabulary.length;
+      updateCard();
+    }
+
+    // QUIZ
+    function startQuiz() {
+      const randomIndex = Math.floor(Math.random() * vocabulary.length);
+      currentQuizWord = vocabulary[randomIndex];
+
+      document.getElementById('quiz-question').innerText = `Як перекладається: "${currentQuizWord.no}"?`;
+
+      // Options
+      let options = [currentQuizWord.uk];
+      while (options.length < 4) {
+        let randUk = vocabulary[Math.floor(Math.random() * vocabulary.length)].uk;
+        if (!options.includes(randUk)) options.push(randUk);
+      }
+      options.sort(() => Math.random() - 0.5);
+
+      const optionsGrid = document.getElementById('options');
+      optionsGrid.innerHTML = '';
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(btn, opt);
+        optionsGrid.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(btn, answer) {
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(b => b.disabled = true);
+
+      if (answer === currentQuizWord.uk) {
+        btn.classList.add('correct');
+        quizScore++;
+        document.getElementById('quiz-score').innerText = `Рахунок: ${quizScore}`;
+      } else {
+        btn.classList.add('wrong');
+      }
+
+      setTimeout(startQuiz, 1200);
+    }
+
+    // DICTIONARY
+    function renderDict(filter = '') {
+      const list = document.getElementById('dict-list');
+      list.innerHTML = '';
+      vocabulary
+        .filter(item => item.no.toLowerCase().includes(filter.toLowerCase()) || item.uk.toLowerCase().includes(filter.toLowerCase()))
+        .forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'dict-item';
+          row.innerHTML = `<span class="norwegian-word">${item.no}</span><span>${item.uk}</span>`;
+          list.appendChild(row);
+        });
+    }
+
+    function filterDict() {
+      const query = document.getElementById('search').value;
+      renderDict(query);
+    }
+
+    // INIT
+    updateCard();
+    renderDict();
+  </script>
+</body>
+</html>
