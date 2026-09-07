@@ -1,546 +1,495 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Norsk A1 — Интерактивный тренажер</title>
-  <style>
-    :root {
-      --primary: #00205B;
-      --secondary: #BA0C2F;
-      --bg: #F4F6F9;
-      --card-bg: #FFFFFF;
-      --text: #2D3748;
-      --success: #28A745;
-      --danger: #DC3545;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Norskkurs - Leksjon 1 & 2 (Hei! A1)</title>
+    <style>
+        :root {
+            --primary: #d9381e;
+            --primary-dark: #b02a14;
+            --secondary: #00205b;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --border: #e9ecef;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffeba2;
+        }
 
-    * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
+        header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary);
+        }
 
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
 
-    h1 {
-      color: var(--primary);
-      margin-bottom: 5px;
-      font-size: 1.8rem;
-    }
+        header p {
+            margin-top: 0.3rem;
+            opacity: 0.9;
+        }
 
-    p.subtitle {
-      color: #666;
-      margin-top: 0;
-      font-size: 0.95rem;
-    }
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-    .nav-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+        nav button {
+            background: none;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
 
-    .tab-btn {
-      padding: 8px 16px;
-      border: none;
-      background-color: #E2E8F0;
-      color: var(--text);
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+        nav button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
 
-    .tab-btn.active {
-      background-color: var(--primary);
-      color: white;
-    }
+        main {
+            max-width: 950px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
 
-    .section {
-      display: none;
-      width: 100%;
-      max-width: 650px;
-    }
+        .tab-content {
+            display: none;
+        }
 
-    .section.active {
-      display: block;
-    }
+        .tab-content.active {
+            display: block;
+        }
 
-    /* FLASHCARDS */
-    .card-container {
-      perspective: 1000px;
-      width: 100%;
-      height: 220px;
-      cursor: pointer;
-    }
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
 
-    .card {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+        h2 {
+            color: var(--secondary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.4rem;
+            margin-top: 0;
+        }
 
-    .card.flipped {
-      transform: rotateY(180deg);
-    }
+        h3 {
+            color: var(--primary);
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
 
-    .card-front, .card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 15px;
-      background: var(--card-bg);
-      padding: 20px;
-      box-sizing: border-box;
-    }
+        /* Search & Tables */
+        .search-box {
+            width: 100%;
+            padding: 0.7rem;
+            font-size: 0.95rem;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
 
-    .card-front {
-      border-top: 6px solid var(--primary);
-    }
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
 
-    .card-back {
-      background-color: #F0F4FF;
-      transform: rotateY(180deg);
-      border-top: 6px solid var(--secondary);
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
 
-    .word {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--primary);
-      margin-bottom: 10px;
-      text-align: center;
-    }
+        th, td {
+            padding: 0.6rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
 
-    .translation {
-      font-size: 1.5rem;
-      color: var(--secondary);
-      text-align: center;
-    }
+        th {
+            background-color: #f1f3f5;
+            color: var(--secondary);
+        }
 
-    .hint {
-      font-size: 0.85rem;
-      color: #888;
-      position: absolute;
-      bottom: 15px;
-    }
+        .rule-box {
+            background-color: #f1f3f5;
+            border-left: 4px solid var(--secondary);
+            padding: 0.8rem 1rem;
+            border-radius: 4px;
+            margin: 0.8rem 0;
+        }
 
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 15px;
-    }
+        .grammar-highlight {
+            color: var(--primary);
+            font-weight: bold;
+        }
 
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      background: var(--primary);
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
+        /* Quiz & Practice Styles */
+        .quiz-question {
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px dashed var(--border);
+        }
 
-    .btn:hover { opacity: 0.9; }
+        .quiz-option {
+            display: block;
+            margin: 0.3rem 0;
+            cursor: pointer;
+        }
 
-    /* QUIZ */
-    .quiz-card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
+        .check-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
 
-    .options-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 15px;
-    }
+        .check-btn:hover {
+            background: var(--primary-dark);
+        }
 
-    .option-btn {
-      padding: 12px;
-      border: 2px solid #E2E8F0;
-      background: white;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+        .feedback {
+            margin-top: 0.4rem;
+            font-weight: bold;
+        }
 
-    .option-btn.correct {
-      background-color: var(--success);
-      color: white;
-      border-color: var(--success);
-    }
+        .feedback.correct { color: var(--success); }
+        .feedback.incorrect { color: var(--danger); }
 
-    .option-btn.wrong {
-      background-color: var(--danger);
-      color: white;
-      border-color: var(--danger);
-    }
+        .word-tag {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin: 0.2rem;
+            font-family: monospace;
+        }
 
-    /* DICTIONARY & ALPHABET */
-    .search-box {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #CBD5E0;
-      border-radius: 8px;
-      font-size: 1rem;
-      margin-bottom: 15px;
-    }
-
-    .dict-list {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .dict-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 20px;
-      border-bottom: 1px solid #E2E8F0;
-    }
-
-    .dict-item:last-child { border-bottom: none; }
-
-    .norwegian-word {
-      font-weight: bold;
-      color: var(--primary);
-    }
-
-    /* ALPHABET GRID */
-    .alphabet-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 12px;
-    }
-
-    .letter-card {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      border-top: 4px solid var(--primary);
-    }
-
-    .letter-card.special {
-      border-top: 4px solid var(--secondary);
-      background: #FFF5F5;
-    }
-
-    .letter-title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: var(--primary);
-    }
-
-    .letter-card.special .letter-title {
-      color: var(--secondary);
-    }
-
-    .letter-sound {
-      font-size: 0.95rem;
-      font-color: #555;
-      font-weight: 600;
-      margin: 5px 0;
-    }
-
-    .letter-example {
-      font-size: 0.85rem;
-      color: #777;
-    }
-  </style>
+        @media (max-width: 600px) {
+            nav button {
+                padding: 0.6rem 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>Norsk A1 — Тренажёр</h1>
-    <p class="subtitle">Алфавит, карточки, тест и словарь</p>
-  </header>
+<header>
+    <h1>Norskkurs — Grammatikk & Øvinger</h1>
+    <p>Теория, грамматика и тесты на основе пособия «HEI! A1» (Leksjon 1 & 2)</p>
+</header>
 
-  <div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('alphabet', event)">Алфавит</button>
-    <button class="tab-btn" onclick="switchTab('cards', event)">Карточки</button>
-    <button class="tab-btn" onclick="switchTab('quiz', event)">Тест</button>
-    <button class="tab-btn" onclick="switchTab('dict', event)">Словарь</button>
-  </div>
+<nav>
+    <button class="nav-btn active" onclick="openTab('grammatikk')">💡 Грамматика (Hei!)</button>
+    <button class="nav-btn" onclick="openTab('oppgaver')">✍️ Правописание предложений</button>
+    <button class="nav-btn" onclick="openTab('test')">📝 Интерактивный тест</button>
+    <button class="nav-btn" onclick="openTab('ordliste')">📖 Словарь и Глаголы</button>
+</nav>
 
-  <!-- SECTION: ALPHABET -->
-  <div id="alphabet" class="section active">
-    <div class="alphabet-grid" id="alphabet-grid"></div>
-  </div>
+<main>
 
-  <!-- SECTION: FLASHCARDS -->
-  <div id="cards" class="section">
-    <div class="card-container" onclick="flipCard()">
-      <div class="card" id="card">
-        <div class="card-front">
-          <div class="word" id="card-norwegian">...</div>
-          <div class="hint">Нажмите, чтобы перевернуть</div>
+    <!-- TAB: GRAMMATIKK -->
+    <div id="grammatikk" class="tab-content active">
+        
+        <!-- Ordstilling -->
+        <div class="card">
+            <h2>1. Порядок слов в предложении (Ordstilling)</h2>
+            
+            <h3>А. Повествовательное предложение (Setning)</h3>
+            <div class="rule-box">
+                <b>Правило V2:</b> В норвежском предложении глагол (<span class="grammar-highlight">verbal</span>) ВСЕГДА стоит на <b>2-м месте</b>.
+            </div>
+            <table>
+                <tr>
+                    <th>Plass 1 (Subjekt)</th>
+                    <th>Plass 2 (Verbal)</th>
+                    <th>Resten</th>
+                </tr>
+                <tr><td>Kåre</td><td><span class="grammar-highlight">bor</span></td><td>i Bergen.</td></tr>
+                <tr><td>Han</td><td><span class="grammar-highlight">jobber</span></td><td>på et lager.</td></tr>
+                <tr><td>Mali</td><td><span class="grammar-highlight">kommer</span></td><td>fra Thailand.</td></tr>
+                <tr><td>Hun</td><td><span class="grammar-highlight">snakker</span></td><td>thai.</td></tr>
+            </table>
+
+            <h3>Б. Общие вопросы без вопросительного слова (Ja/Nei-spørsmål)</h3>
+            <p>В вопросах без вопросительного слова глагол стоит на <b>1-м месте</b> (V1):</p>
+            <table>
+                <tr>
+                    <th>Plass 1 (Verbal)</th>
+                    <th>Plass 2 (Subjekt)</th>
+                    <th>Resten</th>
+                    <th>Svar (Ответ)</th>
+                </tr>
+                <tr><td><span class="grammar-highlight">Er</span></td><td>du</td><td>ny her?</td><td>Ja, jeg er ny her.</td></tr>
+                <tr><td><span class="grammar-highlight">Bor</span></td><td>du</td><td>i Bergen?</td><td>Ja, jeg bor i Bergen.</td></tr>
+                <tr><td><span class="grammar-highlight">Jobber</span></td><td>Mali?</td><td></td><td>Nei, hun jobber ikke.</td></tr>
+            </table>
+
+            <h3>В. Вопросы с вопросительным словом (Spørsmål med spørreord)</h3>
+            <p>Вопросительное слово занимает 1-е место, а глагол по-прежнему на <b>2-м месте</b> (V2):</p>
+            <table>
+                <tr>
+                    <th>Plass 1 (Spørreord)</th>
+                    <th>Plass 2 (Verbal)</th>
+                    <th>Plass 3 (Subjekt / Resten)</th>
+                </tr>
+                <tr><td>Hva</td><td><span class="grammar-highlight">heter</span></td><td>du?</td></tr>
+                <tr><td>Hvor</td><td><span class="grammar-highlight">kommer</span></td><td>du fra?</td></tr>
+                <tr><td>Hvor</td><td><span class="grammar-highlight">bor</span></td><td>du?</td></tr>
+                <tr><td>Hva</td><td><span class="grammar-highlight">gjør</span></td><td>du?</td></tr>
+                <tr><td>Hvem</td><td><span class="grammar-highlight">er</span></td><td>dette?</td></tr>
+            </table>
+
+            <h3>Г. Соединение предложений союзами (og / men)</h3>
+            <ul>
+                <li>Союз <strong>og</strong> (и): <i>Jeg heter Halina Dudek. Jeg er 38 år.</i> &rarr; <i>Jeg heter Halina Dudek, <strong>og</strong> jeg er 38 år.</i></li>
+                <li>Союз <strong>men</strong> (но): <i>Jeg kommer fra Polen. Jeg bor i Norge.</i> &rarr; <i>Jeg kommer fra Polen, <strong>men</strong> jeg bor i Norge.</i></li>
+            </ul>
         </div>
-        <div class="card-back">
-          <div class="translation" id="card-russian">...</div>
+
+        <!-- Substantiv & Pronomen -->
+        <div class="card">
+            <h2>2. Существительные и Местоимения (Substantiv og Pronomen)</h2>
+            
+            <h3>Личные местоимения (Personlige pronomen)</h3>
+            <table>
+                <tr>
+                    <th>Единственное число (Entall)</th>
+                    <th>Множественное число (Flertall)</th>
+                </tr>
+                <tr><td><b>jeg</b> (я)</td><td><b>vi</b> (мы)</td></tr>
+                <tr><td><b>du</b> (ты)</td><td><b>dere</b> (вы)</td></tr>
+                <tr><td><b>han</b> (он) / <b>hun</b> (она)</td><td><b>de</b> (они) <i>[произносится /di/]</i></td></tr>
+            </table>
+            <p><i>Пример замены:</i> Farid &rarr; <b>han</b>; Mali &rarr; <b>hun</b>; Kåre og Ali &rarr; <b>de</b>.</p>
+
+            <h3>Существительные (Substantiv)</h3>
+            <div class="rule-box">
+                Существительные имеют 3 рода: <b>Hankjønn</b> (мужской), <b>Hunkjønn</b> (женский), <b>Intetkjønn</b> (средний).
+            </div>
+            <ul>
+                <li><b>Hankjønn (en):</b> <span class="word-tag">en blyant</span> (карандаш), <span class="word-tag">en stol</span> (стул), <span class="word-tag">en elev</span> (ученик).</li>
+                <li><b>Hunkjønn (ei/en):</b> <span class="word-tag">ei/en veske</span> (Сумка), <span class="word-tag">ei/en bok</span> (Книга), <span class="word-tag">ei/en tavle</span> (Доска).</li>
+                <li><b>Intetkjønn (et):</b> <span class="word-tag">et viskelær</span> (Ластик), <span class="word-tag">et papir</span> (Бумага), <span class="word-tag">et språk</span> (Язык).</li>
+            </ul>
+
+            <h3>Большая и маленькая буква (Egennavn / Fellesnavn)</h3>
+            <ul>
+                <li><b>Egennavn (Имена и названия):</b> пишутся с <b>БОЛЬШОЙ</b> буквы (Farid, Mali, Bergen, Norge, Syria).</li>
+                <li><b>Fellesnavn (Нарицательные):</b> пишутся с <b>маленькой</b> буквы (en elev, en drosje, et klasserom, en lærer).</li>
+            </ul>
         </div>
-      </div>
     </div>
-    <div class="controls">
-      <button class="btn" onclick="prevCard()">Назад</button>
-      <span id="card-progress" style="align-self: center; font-weight: bold;">1 / 0</span>
-      <button class="btn" onclick="nextCard()">Вперёд</button>
+
+    <!-- TAB: OPPGAVER (ПРАВОПИСАНИЕ) -->
+    <div id="oppgaver" class="tab-content">
+        <div class="card">
+            <h2>Правописание предложений (Ordstilling)</h2>
+            <p>Составьте правильные предложения, соблюдая правило глагола на 2-м месте (V2) или 1-м месте в вопросах.</p>
+            
+            <div class="quiz-question" id="sent1">
+                <p><b>1. Сформулируйте предложение из слов:</b> <span class="word-tag">fra</span> <span class="word-tag">kommer</span> <span class="word-tag">Mali</span> <span class="word-tag">Thailand</span></p>
+                <input type="text" id="sent1_ans" class="search-box" placeholder="Введите предложение с заглавной буквы и с точкой...">
+                <button class="check-btn" onclick="checkSentence('sent1_ans', 'Mali kommer fra Thailand.', 'sent1_fb')">Проверить</button>
+                <div id="sent1_fb" class="feedback"></div>
+            </div>
+
+            <div class="quiz-question" id="sent2">
+                <p><b>2. Сделайте вопрос без вопросительного слова:</b> <span class="word-tag">du</span> <span class="word-tag">i</span> <span class="word-tag">Bergen</span> <span class="word-tag">bor</span></p>
+                <input type="text" id="sent2_ans" class="search-box" placeholder="Введите вопрос с вопросительным знаком...">
+                <button class="check-btn" onclick="checkSentence('sent2_ans', 'Bor du i Bergen?', 'sent2_fb')">Проверить</button>
+                <div id="sent2_fb" class="feedback"></div>
+            </div>
+
+            <div class="quiz-question" id="sent3">
+                <p><b>3. Соедините два предложения союзом 'men':</b> <br><i>Jeg kommer fra Polen. Jeg bor i Norge.</i></p>
+                <input type="text" id="sent3_ans" class="search-box" placeholder="Введите объединенное предложение...">
+                <button class="check-btn" onclick="checkSentence('sent3_ans', 'Jeg kommer fra Polen, men jeg bor i Norge.', 'sent3_fb')">Проверить</button>
+                <div id="sent3_fb" class="feedback"></div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- SECTION: QUIZ -->
-  <div id="quiz" class="section">
-    <div class="quiz-card">
-      <h3 id="quiz-question" style="text-align: center;">Как переводится слово?</h3>
-      <div class="options-grid" id="options"></div>
-      <div style="margin-top: 15px; text-align: right; font-weight: bold;" id="quiz-score">Счёт: 0</div>
+    <!-- TAB: TEST -->
+    <div id="test" class="tab-content">
+        <div class="card">
+            <h2>Быстрый тест по грамматике Leksjon 1 & 2</h2>
+
+            <!-- Q1 -->
+            <div class="quiz-question">
+                <p><b>1. Какая позиция у глагола в предложении «Jeg ____ fra Ukraina»?</b></p>
+                <label class="quiz-option"><input type="radio" name="q1" value="1"> Первое место</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="2"> Второе место (V2)</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="3"> В самом конце предложения</label>
+                <button class="check-btn" onclick="checkRadio('q1', '2', 'q1_fb')">Проверить</button>
+                <div id="q1_fb" class="feedback"></div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-question">
+                <p><b>2. Выберите правильный вопрос:</b></p>
+                <label class="quiz-option"><input type="radio" name="q2" value="1"> Hvor du bor?</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="2"> Hvor bor du?</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="3"> Bor hvor du?</label>
+                <button class="check-btn" onclick="checkRadio('q2', '2', 'q2_fb')">Проверить</button>
+                <div id="q2_fb" class="feedback"></div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-question">
+                <p><b>3. Замените подлежащее местоимением: «Kåre og Ali jobber på lageret.» &rarr; «___ jobber på lageret.»</b></p>
+                <label class="quiz-option"><input type="radio" name="q3" value="1"> Dere</label>
+                <label class="quiz-option"><input type="radio" name="q3" value="2"> Vi</label>
+                <label class="quiz-option"><input type="radio" name="q3" value="3"> De</label>
+                <button class="check-btn" onclick="checkRadio('q3', '3', 'q3_fb')">Проверить</button>
+                <div id="q3_fb" class="feedback"></div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-question">
+                <p><b>4. Какое слово является имя собственным (Egennavn) и должно писаться с большой буквы?</b></p>
+                <label class="quiz-option"><input type="radio" name="q4" value="1"> drosje</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="2"> syria</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="3"> klasserom</label>
+                <button class="check-btn" onclick="checkRadio('q4', '2', 'q4_fb')">Проверить</button>
+                <div id="q4_fb" class="feedback"></div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- SECTION: DICTIONARY -->
-  <div id="dict" class="section">
-    <input type="text" class="search-box" id="search" placeholder="Поиск слова..." oninput="filterDict()">
-    <div class="dict-list" id="dict-list"></div>
-  </div>
+    <!-- TAB: ORDLISTE OG VERB -->
+    <div id="ordliste" class="tab-content">
+        <div class="card">
+            <h2>Список глаголов (Verb fra Leksjon 2)</h2>
+            <p>Глаголы обозначают действие или состояние (hva noen gjør / hva som skjer):</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Verb (Norsk)</th>
+                        <th>Перевод (Русский)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>står opp</td><td>встает (с постели)</td></tr>
+                    <tr><td>går</td><td>идет / ходит</td></tr>
+                    <tr><td>snakker</td><td>говорит / разговаривает</td></tr>
+                    <tr><td>sitter</td><td>сидит</td></tr>
+                    <tr><td>gjør</td><td>делает</td></tr>
+                    <tr><td>bruker</td><td>использует / использует</td></tr>
+                    <tr><td>forstår</td><td>понимает</td></tr>
+                    <tr><td>jobber</td><td>работает</td></tr>
+                    <tr><td>dusjer</td><td>принимает душ</td></tr>
+                    <tr><td>er</td><td>есть / является (быть)</td></tr>
+                    <tr><td>kommer</td><td>приходит / родом из</td></tr>
+                    <tr><td>slutter</td><td>заканчивает(ся)</td></tr>
+                    <tr><td>kjøper</td><td>покупает</td></tr>
+                    <tr><td>betyr</td><td>значит / означает</td></tr>
+                    <tr><td>hjelper</td><td>помогает</td></tr>
+                    <tr><td>spiser</td><td>ест / кушает</td></tr>
+                    <tr><td>begynner</td><td>начинает(ся)</td></tr>
+                    <tr><td>heter</td><td>зовут / называется</td></tr>
+                    <tr><td>har</td><td>имеет / есть</td></tr>
+                    <tr><td>leser</td><td>читает</td></tr>
+                    <tr><td>kjører</td><td>ведет (машину / погрузчик)</td></tr>
+                    <tr><td>møter</td><td>встречает</td></tr>
+                    <tr><td>lærer</td><td>учит / изучает</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-  <script>
-    const alphabet = [
-      { l: "A a", s: "[ а ]", e: "Ja (да)" },
-      { l: "B b", s: "[ бэ ]", e: "Bra (хорошо)" },
-      { l: "C c", s: "[ сэ ]", e: "Camping" },
-      { l: "D d", s: "[ дэ ]", e: "Dag (день)" },
-      { l: "E e", s: "[ э ]", e: "Er (есть)" },
-      { l: "F f", s: "[ эф ]", e: "Fra (из/от)" },
-      { l: "G g", s: "[ гэ ]", e: "God (хороший)" },
-      { l: "H h", s: "[ го ]", e: "Hei (привет)" },
-      { l: "I i", s: "[ и ]", e: "I (в)" },
-      { l: "J j", s: "[ йот ]", e: "Jeg (я)" },
-      { l: "K k", s: "[ ка ]", e: "Kveld (вечер)" },
-      { l: "L l", s: "[ эл ]", e: "Lære (учить)" },
-      { l: "M m", s: "[ ем ]", e: "Morgen (утро)" },
-      { l: "N n", s: "[ эн ]", e: "Nei (нет)" },
-      { l: "O o", s: "[ у ]", e: "Og (и)" },
-      { l: "P p", s: "[ пэ ]", e: "Pappa (папа)" },
-      { l: "Q q", s: "[ ку ]", e: "Riders" },
-      { l: "R r", s: "[ эр ]", e: "Rød (красный)" },
-      { l: "S s", s: "[ эс ]", e: "Se (смотреть)" },
-      { l: "T t", s: "[ тэ ]", e: "Takk (спасибо)" },
-      { l: "U u", s: "[ ю-у ]", e: "Ung (молодой)" },
-      { l: "V v", s: "[ вэ ]", e: "Vi (мы)" },
-      { l: "W w", s: "[ добл-вэ ]", e: "Web" },
-      { l: "X x", s: "[ экс ]", e: "Taxi" },
-      { l: "Y y", s: "[ и (округленная) ]", e: "Lytte (слушать)" },
-      { l: "Z z", s: "[ зет ]", e: "Zebra" },
-      { l: "Æ æ", s: "[ э (широкая) ]", e: "Lære (учиться)", spec: true },
-      { l: "Ø ø", s: "[ ё (губы в о) ]", e: "Øl (пиво)", spec: true },
-      { l: "Å å", s: "[ о ]", e: "Å gå (идти)", spec: true }
-    ];
+</main>
 
-    const vocabulary = [
-      { no: "Hei / Hallo", ru: "Привет" },
-      { no: "God morgen", ru: "Доброе утро" },
-      { no: "God dag", ru: "Добрый день" },
-      { no: "God kveld", ru: "Добрый вечер" },
-      { no: "Ha det bra", ru: "До свидания" },
-      { no: "Vi ses", ru: "Увидимся" },
-      { no: "Takk", ru: "Спасибо" },
-      { no: "Tusen takk", ru: "Большое спасибо" },
-      { no: "Vær så god", ru: "Пожалуйста" },
-      { no: "Unskyld", ru: "Извините" },
-      { no: "Ja", ru: "Да" },
-      { no: "Nei", ru: "Нет" },
-      { no: "Hva heter du?", ru: "Как тебя зовут?" },
-      { no: "Jeg heter...", ru: "Меня зовут..." },
-      { no: "Hvordan går det?", ru: "Как дела?" },
-      { no: "Bare bra, takk", ru: "Отлично, спасибо" },
-      { no: "Hvor kommer du fra?", ru: "Откуда ты?" },
-      { no: "Snakker du norsk?", ru: "Ты говоришь по-норвежски?" },
-      { no: "Jeg snakker litt norsk", ru: "Я немного говорю по-норвежски" },
-      { no: "Jeg", ru: "Я" },
-      { no: "Du", ru: "Ты" },
-      { no: "Han", ru: "Он" },
-      { no: "Hun", ru: "Она" },
-      { no: "Vi", ru: "Мы" },
-      { no: "Dere", ru: "Вы (множ.)" },
-      { no: "De", ru: "Они" },
-      { no: "Å være (er)", ru: "Быть (есть)" },
-      { no: "Å ha (har)", ru: "Иметь (есть у)" },
-      { no: "Å snakke (snakker)", ru: "Говорить" },
-      { no: "Å bo (bor)", ru: "Жить" },
-      { no: "Å lære (lærer)", ru: "Учить / учиться" },
-      { no: "Å spise (spiser)", ru: "Есть" },
-      { no: "Å drikke (drikker)", ru: "Пить" },
-      { no: "Å gå (går)", ru: "Идти / ходить" },
-      { no: "Å komme (kommer)", ru: "Приходить" },
-      { no: "Å forstå (forstår)", ru: "Понимать" },
-      { no: "mandag", ru: "понедельник" },
-      { no: "tirsdag", ru: "вторник" },
-      { no: "onsdag", ru: "среда" },
-      { no: "torsdag", ru: "четверг" },
-      { no: "fredag", ru: "пятница" },
-      { no: "lørdag", ru: "суббота" },
-      { no: "søndag", ru: "воскресенье" },
-      { no: "en / et (1)", ru: "один" },
-      { no: "to (2)", ru: "два" },
-      { no: "tre (3)", ru: "три" },
-      { no: "fire (4)", ru: "четыре" },
-      { no: "fem (5)", ru: "пять" },
-      { no: "seks (6)", ru: "шесть" },
-      { no: "sju / syv (7)", ru: "семь" },
-      { no: "åtte (8)", ru: "восемь" },
-      { no: "ni (9)", ru: "девять" },
-      { no: "ti (10)", ru: "десять" }
-    ];
+<script>
+    function openTab(tabId) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
 
-    let currentCardIndex = 0;
-    let quizScore = 0;
-    let currentQuizWord = null;
+        const buttons = document.querySelectorAll('.nav-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
 
-    // RENDER ALPHABET
-    function renderAlphabet() {
-      const grid = document.getElementById('alphabet-grid');
-      grid.innerHTML = '';
-      alphabet.forEach(item => {
-        const card = document.createElement('div');
-        card.className = `letter-card ${item.spec ? 'special' : ''}`;
-        card.innerHTML = `
-          <div class="letter-title">${item.l}</div>
-          <div class="letter-sound">${item.s}</div>
-          <div class="letter-example">${item.e}</div>
-        `;
-        grid.appendChild(card);
-      });
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
     }
 
-    // TAB SWITCHING
-    function switchTab(tabId, event) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      
-      document.getElementById(tabId).classList.add('active');
-      if (event) event.target.classList.add('active');
-
-      if (tabId === 'quiz') startQuiz();
+    function checkSentence(inputId, correctText, feedbackId) {
+        const input = document.getElementById(inputId).value.trim();
+        const feedback = document.getElementById(feedbackId);
+        
+        if (input.toLowerCase() === correctText.toLowerCase()) {
+            feedback.innerHTML = "Верно! 🎉 (" + correctText + ")";
+            feedback.className = "feedback correct";
+        } else {
+            feedback.innerHTML = "Пока не совсем правильно. Правильный вариант: <b>" + correctText + "</b>";
+            feedback.className = "feedback incorrect";
+        }
     }
 
-    // FLASHCARDS
-    function updateCard() {
-      const cardEl = document.getElementById('card');
-      cardEl.classList.remove('flipped');
-      setTimeout(() => {
-        document.getElementById('card-norwegian').innerText = vocabulary[currentCardIndex].no;
-        document.getElementById('card-russian').innerText = vocabulary[currentCardIndex].ru;
-        document.getElementById('card-progress').innerText = `${currentCardIndex + 1} / ${vocabulary.length}`;
-      }, 150);
+    function checkRadio(name, correctVal, feedbackId) {
+        const options = document.getElementsByName(name);
+        const feedback = document.getElementById(feedbackId);
+        let selected = null;
+
+        for (const option of options) {
+            if (option.checked) {
+                selected = option.value;
+                break;
+            }
+        }
+
+        if (!selected) {
+            feedback.innerHTML = "Пожалуйста, выберите вариант ответа.";
+            feedback.className = "feedback incorrect";
+            return;
+        }
+
+        if (selected === correctVal) {
+            feedback.innerHTML = "Верно! 👍";
+            feedback.className = "feedback correct";
+        } else {
+            feedback.innerHTML = "Неверно. Попробуйте ещё раз!";
+            feedback.className = "feedback incorrect";
+        }
     }
+</script>
 
-    function flipCard() {
-      document.getElementById('card').classList.toggle('flipped');
-    }
-
-    function nextCard() {
-      currentCardIndex = (currentCardIndex + 1) % vocabulary.length;
-      updateCard();
-    }
-
-    function prevCard() {
-      currentCardIndex = (currentCardIndex - 1 + vocabulary.length) % vocabulary.length;
-      updateCard();
-    }
-
-    // QUIZ
-    function startQuiz() {
-      const randomIndex = Math.floor(Math.random() * vocabulary.length);
-      currentQuizWord = vocabulary[randomIndex];
-
-      document.getElementById('quiz-question').innerText = `Как переводится: "${currentQuizWord.no}"?`;
-
-      let options = [currentQuizWord.ru];
-      while (options.length < 4) {
-        let randRu = vocabulary[Math.floor(Math.random() * vocabulary.length)].ru;
-        if (!options.includes(randRu)) options.push(randRu);
-      }
-      options.sort(() => Math.random() - 0.5);
-
-      const optionsGrid = document.getElementById('options');
-      optionsGrid.innerHTML = '';
-      options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = opt;
-        btn.onclick = () => checkAnswer(btn, opt);
-        optionsGrid.appendChild(btn);
-      });
-    }
-
-    function checkAnswer(btn, answer) {
-      const buttons = document.querySelectorAll('.option-btn');
-      buttons.forEach(b => b.disabled = true);
-
-      if (answer === currentQuizWord.ru) {
-        btn.classList.add('correct');
-        quizScore++;
-        document.getElementById('quiz-score').innerText = `Счёт: ${quizScore}`;
-      } else {
-        btn.classList.add('wrong');
-      }
-
-      setTimeout(startQuiz, 1200);
-    }
-
-    // DICTIONARY
-    function renderDict(filter = '') {
-      const list = document.getElementById('dict-list');
-      list.innerHTML = '';
-      vocabulary
-        .filter(item => item.no.toLowerCase().includes(filter.toLowerCase()) || item.ru.toLowerCase().includes(filter.toLowerCase()))
-        .forEach(item => {
-          const row = document.createElement('div');
-          row.className = 'dict-item';
-          row.innerHTML = `<span class="norwegian-word">${item.no}</span><span>${item.ru}</span>`;
-          list.appendChild(row);
-        });
-    }
-
-    function filterDict() {
-      const query = document.getElementById('search').value;
-      renderDict(query);
-    }
-
-    // INIT
-    renderAlphabet();
-    updateCard();
-    renderDict();
-  </script>
 </body>
 </html>
