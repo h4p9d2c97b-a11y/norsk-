@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Norsk A1 — Інтерактивний тренажер</title>
+  <title>Norsk A1 — Интерактивный тренажер</title>
   <style>
     :root {
       --primary: #00205B;
@@ -15,9 +15,7 @@
       --danger: #DC3545;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -33,7 +31,7 @@
 
     header {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     h1 {
@@ -50,14 +48,14 @@
 
     .nav-tabs {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 20px;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     .tab-btn {
-      padding: 10px 20px;
+      padding: 8px 16px;
       border: none;
       background-color: #E2E8F0;
       color: var(--text);
@@ -75,7 +73,7 @@
     .section {
       display: none;
       width: 100%;
-      max-width: 600px;
+      max-width: 650px;
     }
 
     .section.active {
@@ -134,11 +132,13 @@
       font-weight: bold;
       color: var(--primary);
       margin-bottom: 10px;
+      text-align: center;
     }
 
     .translation {
       font-size: 1.5rem;
       color: var(--secondary);
+      text-align: center;
     }
 
     .hint {
@@ -164,9 +164,7 @@
       font-size: 1rem;
     }
 
-    .btn:hover {
-      opacity: 0.9;
-    }
+    .btn:hover { opacity: 0.9; }
 
     /* QUIZ */
     .quiz-card {
@@ -205,7 +203,7 @@
       border-color: var(--danger);
     }
 
-    /* DICTIONARY */
+    /* DICTIONARY & ALPHABET */
     .search-box {
       width: 100%;
       padding: 12px;
@@ -230,89 +228,227 @@
       border-bottom: 1px solid #E2E8F0;
     }
 
-    .dict-item:last-child {
-      border-bottom: none;
-    }
+    .dict-item:last-child { border-bottom: none; }
 
     .norwegian-word {
       font-weight: bold;
       color: var(--primary);
+    }
+
+    /* ALPHABET GRID */
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    .letter-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-top: 4px solid var(--primary);
+    }
+
+    .letter-card.special {
+      border-top: 4px solid var(--secondary);
+      background: #FFF5F5;
+    }
+
+    .letter-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .letter-card.special .letter-title {
+      color: var(--secondary);
+    }
+
+    .letter-sound {
+      font-size: 0.95rem;
+      font-color: #555;
+      font-weight: 600;
+      margin: 5px 0;
+    }
+
+    .letter-example {
+      font-size: 0.85rem;
+      color: #777;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Norsk Leksjon 1-2</h1>
-    <p class="subtitle">Інтерактивний тренажер слів (A1)</p>
+    <h1>Norsk A1 — Тренажёр</h1>
+    <p class="subtitle">Алфавит, карточки, тест и словарь</p>
   </header>
 
   <div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('cards')">Флеш-картки</button>
-    <button class="tab-btn" onclick="switchTab('quiz')">Тест</button>
-    <button class="tab-btn" onclick="switchTab('dict')">Словник</button>
+    <button class="tab-btn active" onclick="switchTab('alphabet', event)">Алфавит</button>
+    <button class="tab-btn" onclick="switchTab('cards', event)">Карточки</button>
+    <button class="tab-btn" onclick="switchTab('quiz', event)">Тест</button>
+    <button class="tab-btn" onclick="switchTab('dict', event)">Словарь</button>
   </div>
 
-  <!-- SECTION 1: FLASHCARDS -->
-  <div id="cards" class="section active">
+  <!-- SECTION: ALPHABET -->
+  <div id="alphabet" class="section active">
+    <div class="alphabet-grid" id="alphabet-grid"></div>
+  </div>
+
+  <!-- SECTION: FLASHCARDS -->
+  <div id="cards" class="section">
     <div class="card-container" onclick="flipCard()">
       <div class="card" id="card">
         <div class="card-front">
           <div class="word" id="card-norwegian">...</div>
-          <div class="hint">Натисніть, щоб перевернути</div>
+          <div class="hint">Нажмите, чтобы перевернуть</div>
         </div>
         <div class="card-back">
-          <div class="translation" id="card-ukrainian">...</div>
+          <div class="translation" id="card-russian">...</div>
         </div>
       </div>
     </div>
     <div class="controls">
-      <button class="btn" onclick="prevCard()">Попередня</button>
-      <span id="card-progress" style="align-self: center; font-weight: bold;">1 / 10</span>
-      <button class="btn" onclick="nextCard()">Наступна</button>
+      <button class="btn" onclick="prevCard()">Назад</button>
+      <span id="card-progress" style="align-self: center; font-weight: bold;">1 / 0</span>
+      <button class="btn" onclick="nextCard()">Вперёд</button>
     </div>
   </div>
 
-  <!-- SECTION 2: QUIZ -->
+  <!-- SECTION: QUIZ -->
   <div id="quiz" class="section">
     <div class="quiz-card">
-      <h3 id="quiz-question">Як перекладається слово?</h3>
+      <h3 id="quiz-question" style="text-align: center;">Как переводится слово?</h3>
       <div class="options-grid" id="options"></div>
-      <div style="margin-top: 15px; text-align: right; font-weight: bold;" id="quiz-score">Рахунок: 0</div>
+      <div style="margin-top: 15px; text-align: right; font-weight: bold;" id="quiz-score">Счёт: 0</div>
     </div>
   </div>
 
-  <!-- SECTION 3: DICTIONARY -->
+  <!-- SECTION: DICTIONARY -->
   <div id="dict" class="section">
-    <input type="text" class="search-box" id="search" placeholder="Пошук слова..." oninput="filterDict()">
+    <input type="text" class="search-box" id="search" placeholder="Поиск слова..." oninput="filterDict()">
     <div class="dict-list" id="dict-list"></div>
   </div>
 
   <script>
+    const alphabet = [
+      { l: "A a", s: "[ а ]", e: "Ja (да)" },
+      { l: "B b", s: "[ бэ ]", e: "Bra (хорошо)" },
+      { l: "C c", s: "[ сэ ]", e: "Camping" },
+      { l: "D d", s: "[ дэ ]", e: "Dag (день)" },
+      { l: "E e", s: "[ э ]", e: "Er (есть)" },
+      { l: "F f", s: "[ эф ]", e: "Fra (из/от)" },
+      { l: "G g", s: "[ гэ ]", e: "God (хороший)" },
+      { l: "H h", s: "[ го ]", e: "Hei (привет)" },
+      { l: "I i", s: "[ и ]", e: "I (в)" },
+      { l: "J j", s: "[ йот ]", e: "Jeg (я)" },
+      { l: "K k", s: "[ ка ]", e: "Kveld (вечер)" },
+      { l: "L l", s: "[ эл ]", e: "Lære (учить)" },
+      { l: "M m", s: "[ ем ]", e: "Morgen (утро)" },
+      { l: "N n", s: "[ эн ]", e: "Nei (нет)" },
+      { l: "O o", s: "[ у ]", e: "Og (и)" },
+      { l: "P p", s: "[ пэ ]", e: "Pappa (папа)" },
+      { l: "Q q", s: "[ ку ]", e: "Riders" },
+      { l: "R r", s: "[ эр ]", e: "Rød (красный)" },
+      { l: "S s", s: "[ эс ]", e: "Se (смотреть)" },
+      { l: "T t", s: "[ тэ ]", e: "Takk (спасибо)" },
+      { l: "U u", s: "[ ю-у ]", e: "Ung (молодой)" },
+      { l: "V v", s: "[ вэ ]", e: "Vi (мы)" },
+      { l: "W w", s: "[ добл-вэ ]", e: "Web" },
+      { l: "X x", s: "[ экс ]", e: "Taxi" },
+      { l: "Y y", s: "[ и (округленная) ]", e: "Lytte (слушать)" },
+      { l: "Z z", s: "[ зет ]", e: "Zebra" },
+      { l: "Æ æ", s: "[ э (широкая) ]", e: "Lære (учиться)", spec: true },
+      { l: "Ø ø", s: "[ ё (губы в о) ]", e: "Øl (пиво)", spec: true },
+      { l: "Å å", s: "[ о ]", e: "Å gå (идти)", spec: true }
+    ];
+
     const vocabulary = [
-      { no: "Hei", uk: "Привіт" },
-      { no: "Ha det bra", uk: "До побачення" },
-      { no: "Takk", uk: "Дякую" },
-      { no: "Ja", uk: "Так" },
-      { no: "Nei", uk: "Ні" },
-      { no: "Jeg", uk: "Я" },
-      { no: "Du", uk: "Ти" },
-      { no: "Hva heter du?", uk: "Як тебя звати?" },
-      { no: "Jeg snakker norsk", uk: "Я розмовляю норвезькою" },
-      { no: "Hvordan går det?", uk: "Як справи?" }
+      { no: "Hei / Hallo", ru: "Привет" },
+      { no: "God morgen", ru: "Доброе утро" },
+      { no: "God dag", ru: "Добрый день" },
+      { no: "God kveld", ru: "Добрый вечер" },
+      { no: "Ha det bra", ru: "До свидания" },
+      { no: "Vi ses", ru: "Увидимся" },
+      { no: "Takk", ru: "Спасибо" },
+      { no: "Tusen takk", ru: "Большое спасибо" },
+      { no: "Vær så god", ru: "Пожалуйста" },
+      { no: "Unskyld", ru: "Извините" },
+      { no: "Ja", ru: "Да" },
+      { no: "Nei", ru: "Нет" },
+      { no: "Hva heter du?", ru: "Как тебя зовут?" },
+      { no: "Jeg heter...", ru: "Меня зовут..." },
+      { no: "Hvordan går det?", ru: "Как дела?" },
+      { no: "Bare bra, takk", ru: "Отлично, спасибо" },
+      { no: "Hvor kommer du fra?", ru: "Откуда ты?" },
+      { no: "Snakker du norsk?", ru: "Ты говоришь по-норвежски?" },
+      { no: "Jeg snakker litt norsk", ru: "Я немного говорю по-норвежски" },
+      { no: "Jeg", ru: "Я" },
+      { no: "Du", ru: "Ты" },
+      { no: "Han", ru: "Он" },
+      { no: "Hun", ru: "Она" },
+      { no: "Vi", ru: "Мы" },
+      { no: "Dere", ru: "Вы (множ.)" },
+      { no: "De", ru: "Они" },
+      { no: "Å være (er)", ru: "Быть (есть)" },
+      { no: "Å ha (har)", ru: "Иметь (есть у)" },
+      { no: "Å snakke (snakker)", ru: "Говорить" },
+      { no: "Å bo (bor)", ru: "Жить" },
+      { no: "Å lære (lærer)", ru: "Учить / учиться" },
+      { no: "Å spise (spiser)", ru: "Есть" },
+      { no: "Å drikke (drikker)", ru: "Пить" },
+      { no: "Å gå (går)", ru: "Идти / ходить" },
+      { no: "Å komme (kommer)", ru: "Приходить" },
+      { no: "Å forstå (forstår)", ru: "Понимать" },
+      { no: "mandag", ru: "понедельник" },
+      { no: "tirsdag", ru: "вторник" },
+      { no: "onsdag", ru: "среда" },
+      { no: "torsdag", ru: "четверг" },
+      { no: "fredag", ru: "пятница" },
+      { no: "lørdag", ru: "суббота" },
+      { no: "søndag", ru: "воскресенье" },
+      { no: "en / et (1)", ru: "один" },
+      { no: "to (2)", ru: "два" },
+      { no: "tre (3)", ru: "три" },
+      { no: "fire (4)", ru: "четыре" },
+      { no: "fem (5)", ru: "пять" },
+      { no: "seks (6)", ru: "шесть" },
+      { no: "sju / syv (7)", ru: "семь" },
+      { no: "åtte (8)", ru: "восемь" },
+      { no: "ni (9)", ru: "девять" },
+      { no: "ti (10)", ru: "десять" }
     ];
 
     let currentCardIndex = 0;
     let quizScore = 0;
     let currentQuizWord = null;
 
+    // RENDER ALPHABET
+    function renderAlphabet() {
+      const grid = document.getElementById('alphabet-grid');
+      grid.innerHTML = '';
+      alphabet.forEach(item => {
+        const card = document.createElement('div');
+        card.className = `letter-card ${item.spec ? 'special' : ''}`;
+        card.innerHTML = `
+          <div class="letter-title">${item.l}</div>
+          <div class="letter-sound">${item.s}</div>
+          <div class="letter-example">${item.e}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
     // TAB SWITCHING
-    function switchTab(tabId) {
+    function switchTab(tabId, event) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       
       document.getElementById(tabId).classList.add('active');
-      event.target.classList.add('active');
+      if (event) event.target.classList.add('active');
 
       if (tabId === 'quiz') startQuiz();
     }
@@ -323,7 +459,7 @@
       cardEl.classList.remove('flipped');
       setTimeout(() => {
         document.getElementById('card-norwegian').innerText = vocabulary[currentCardIndex].no;
-        document.getElementById('card-ukrainian').innerText = vocabulary[currentCardIndex].uk;
+        document.getElementById('card-russian').innerText = vocabulary[currentCardIndex].ru;
         document.getElementById('card-progress').innerText = `${currentCardIndex + 1} / ${vocabulary.length}`;
       }, 150);
     }
@@ -347,13 +483,12 @@
       const randomIndex = Math.floor(Math.random() * vocabulary.length);
       currentQuizWord = vocabulary[randomIndex];
 
-      document.getElementById('quiz-question').innerText = `Як перекладається: "${currentQuizWord.no}"?`;
+      document.getElementById('quiz-question').innerText = `Как переводится: "${currentQuizWord.no}"?`;
 
-      // Options
-      let options = [currentQuizWord.uk];
+      let options = [currentQuizWord.ru];
       while (options.length < 4) {
-        let randUk = vocabulary[Math.floor(Math.random() * vocabulary.length)].uk;
-        if (!options.includes(randUk)) options.push(randUk);
+        let randRu = vocabulary[Math.floor(Math.random() * vocabulary.length)].ru;
+        if (!options.includes(randRu)) options.push(randRu);
       }
       options.sort(() => Math.random() - 0.5);
 
@@ -372,10 +507,10 @@
       const buttons = document.querySelectorAll('.option-btn');
       buttons.forEach(b => b.disabled = true);
 
-      if (answer === currentQuizWord.uk) {
+      if (answer === currentQuizWord.ru) {
         btn.classList.add('correct');
         quizScore++;
-        document.getElementById('quiz-score').innerText = `Рахунок: ${quizScore}`;
+        document.getElementById('quiz-score').innerText = `Счёт: ${quizScore}`;
       } else {
         btn.classList.add('wrong');
       }
@@ -388,11 +523,11 @@
       const list = document.getElementById('dict-list');
       list.innerHTML = '';
       vocabulary
-        .filter(item => item.no.toLowerCase().includes(filter.toLowerCase()) || item.uk.toLowerCase().includes(filter.toLowerCase()))
+        .filter(item => item.no.toLowerCase().includes(filter.toLowerCase()) || item.ru.toLowerCase().includes(filter.toLowerCase()))
         .forEach(item => {
           const row = document.createElement('div');
           row.className = 'dict-item';
-          row.innerHTML = `<span class="norwegian-word">${item.no}</span><span>${item.uk}</span>`;
+          row.innerHTML = `<span class="norwegian-word">${item.no}</span><span>${item.ru}</span>`;
           list.appendChild(row);
         });
     }
@@ -403,6 +538,7 @@
     }
 
     // INIT
+    renderAlphabet();
     updateCard();
     renderDict();
   </script>
