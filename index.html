@@ -1,441 +1,549 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEI! Norsk A1 — Komplett Leksjon 1 & 2</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Norsk Interaktiv Trening - Leksjon 1 & 2</title>
     <style>
         :root {
-            --primary: #d9381e;
-            --primary-dark: #b02a14;
-            --secondary: #00205b;
-            --accent: #457b9d;
-            --bg: #f4f6f8;
-            --card-bg: #ffffff;
-            --text: #212529;
-            --muted: #6c757d;
+            --primary: #0056b3;
+            --primary-light: #e6f0fa;
             --success: #28a745;
             --danger: #dc3545;
-            --radius: 12px;
-            --shadow: 0 4px 16px rgba(0,0,0,0.06);
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --border: #dee2e6;
         }
 
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
 
-        header {
-            background: linear-gradient(135deg, var(--secondary) 0%, #081226 100%);
-            color: white;
-            padding: 2.2rem 1rem 1.8rem;
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
             text-align: center;
-            border-bottom: 5px solid var(--primary);
+            color: var(--primary);
+            margin-bottom: 20px;
         }
-        header h1 { margin: 0; font-size: 2.2rem; font-weight: 800; }
-        header p { margin-top: 0.5rem; opacity: 0.9; font-size: 1.05rem; }
 
-        nav {
+        /* Навигация по вкладкам */
+        .tabs {
             display: flex;
-            justify-content: center;
-            gap: 6px;
-            background: white;
-            padding: 0.8rem 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            overflow-x: auto;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        nav button {
-            background: none;
-            border: none;
-            padding: 0.7rem 1.1rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--muted);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        nav button:hover { background: #f1f3f5; color: var(--secondary); }
-        nav button.active { background: var(--secondary); color: white; }
 
-        main { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        .tab-content { display: none; animation: fadeIn 0.25s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-btn {
+            padding: 12px 20px;
+            border: 1px solid var(--border);
+            background: #e9ecef;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 0 8px 8px 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Сетка карточек */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
 
         .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 1.6rem;
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow);
-            border: 1px solid #e9ecef;
-        }
-        .card h2 { margin-top: 0; color: var(--secondary); font-size: 1.4rem; border-bottom: 2px solid #f1f3f5; padding-bottom: 0.5rem; }
-        .card h3 { color: var(--primary); font-size: 1.15rem; margin-top: 1.2rem; }
-
-        .search-bar {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            font-size: 1rem;
-            border: 2px solid #cbd5e1;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            margin-bottom: 1.2rem;
-        }
-        .search-bar:focus { outline: none; border-color: var(--accent); }
-
-        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        th, td { padding: 0.7rem 0.8rem; text-align: left; border-bottom: 1px solid #e9ecef; font-size: 0.92rem; }
-        th { background: #f1f5f9; color: var(--secondary); font-weight: 700; position: sticky; top: 50px; }
-        tr:hover { background: #f8fafc; }
-
-        .rule-box {
-            background: #eef6ff;
-            border-left: 4px solid var(--accent);
-            padding: 1rem;
-            border-radius: 0 var(--radius) var(--radius) 0;
-            margin: 1rem 0;
+            padding: 15px;
+            background: #fff;
         }
 
-        .person-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .person-card {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: var(--radius);
-            padding: 1rem;
+        /* Часы */
+        .clock-container {
             text-align: center;
+            background: var(--primary-light);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
         }
-        .person-card h4 { margin: 0 0 0.4rem 0; color: var(--secondary); font-size: 1.15rem; }
-        .person-card p { margin: 0.2rem 0; font-size: 0.88rem; color: #475569; }
 
-        .flashcards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .flashcard {
+        svg.clock {
             background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: var(--radius);
-            height: 110px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0.8rem;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.05rem;
-            color: var(--secondary);
-            user-select: none;
-            transition: all 0.2s ease;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        .flashcard:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .flashcard.flipped { background: var(--secondary); color: white; border-color: var(--secondary); }
 
-        .dialogue-box { background: #fffcf7; border: 1px solid #f3ebd8; padding: 1.2rem; border-radius: var(--radius); margin-bottom: 1rem; }
-        .dialogue-line { margin-bottom: 0.4rem; }
-        .speaker { font-weight: 700; color: var(--primary-dark); }
-        .trans { color: var(--muted); font-size: 0.88rem; font-style: italic; margin-bottom: 0.6rem; display: block; }
+        /* Формы и поля */
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
 
-        .quiz-q { background: #f8f9fa; padding: 1.2rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid #e9ecef; }
-        .btn { background: var(--primary); color: white; border: none; padding: 0.7rem 1.4rem; font-size: 0.95rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .btn:hover { background: var(--primary-dark); }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px 12px;
+            margin-top: 5px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
 
-        .input-box { width: 100%; padding: 0.7rem; border: 2px solid #e9ecef; border-radius: 6px; margin: 0.5rem 0; font-size: 0.95rem; }
-        .feedback { font-weight: bold; margin-top: 0.4rem; }
-        .feedback.correct { color: var(--success); }
-        .feedback.incorrect { color: var(--danger); }
+        input[type="text"]:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
 
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
-        .b-side { background: #e0f2fe; color: #0369a1; }
-        .b-type { background: #f1f5f9; color: #334155; }
+        .write-practice {
+            background: #fff8e1;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        /* Кнопки */
+        .btn-check {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .btn-check:hover {
+            opacity: 0.9;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>HEI! Norsk A1 — Portal</h1>
-    <p>Полный интерактивный материал по учебнику HEI! (Leksjon 1 & 2)</p>
-</header>
+<div class="container">
+    <h1>🇳🇴 Norsk Leksjon 1 & 2: Interaktiv Trening</h1>
 
-<nav>
-    <button class="nav-btn active" onclick="openTab('ordliste')">📚 Полный словарь</button>
-    <button class="nav-btn" onclick="openTab('flashcards')">🎴 Карточки слов</button>
-    <button class="nav-btn" onclick="openTab('personer')">👥 Персонажи HEI!</button>
-    <button class="nav-btn" onclick="openTab('tekster')">📖 Тексты и Диалоги</button>
-    <button class="nav-btn" onclick="openTab('grammatikk')">💡 Грамматика и Заметки</button>
-    <button class="nav-btn" onclick="openTab('arbeidsbok')">✍️ Рабочая тетрадь</button>
-</nav>
-
-<main>
-
-    <!-- TAB 1: ORDLISTE -->
-    <div id="ordliste" class="tab-content active">
-        <div class="card">
-            <h2>📚 Полный словарь (Leksjon 1 & 2 — Стр. 6–35)</h2>
-            <input type="text" id="dictSearch" class="search-bar" onkeyup="filterDict()" placeholder="Поиск слова (норвежский или русский)...">
-
-            <table id="dictTable">
-                <thead>
-                    <tr>
-                        <th>Стр.</th>
-                        <th>Norsk</th>
-                        <th>Русский перевод</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Leksjon 1 (6-11) -->
-                    <tr><td><span class="badge b-side">6-9</span></td><td>leksjon</td><td>урок</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>Hei!</td><td>Привет!</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>Hva heter du?</td><td>Как тебя зовут?</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>du</td><td>ты (здесь: тебя)</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>hva</td><td>что (здесь: как) / чем?</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>Jeg heter ...</td><td>Меня зовут ...</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>jeg</td><td>я (здесь: меня)</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>er</td><td>есть / являюсь</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>bor</td><td>живу</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>i</td><td>в</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>Bergen</td><td>Берген</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>Jeg kommer fra ...</td><td>Я приехал из ...</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>fra</td><td>из</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>snakker</td><td>говорю</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>arabisk</td><td>арабский</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>og</td><td>и</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>litt</td><td>немного</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>norsk</td><td>норвежский</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>går på</td><td>хожу на</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>norskkurs</td><td>курс норвежского языка</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>Thailand / thai</td><td>Таиланд / таиландский</td></tr>
-                    <tr><td><span class="badge b-side">6-9</span></td><td>engelsk</td><td>английский</td></tr>
-                    <tr><td><span class="badge b-side">10-11</span></td><td>Polen / men / Norge</td><td>Польша / но / Норвегия</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>morsmål</td><td>родной язык</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>mitt / min / min mann</td><td>мой / моя / мой муж</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>polsk / også</td><td>польский / также</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>jobber / kantine / på / et</td><td>работаю / столовая / на, в / артикль ср. р.</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>lager / Ålesund / ny</td><td>склад / Олесунн / новый</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>Er du ny her? / ja / nei</td><td>Ты здесь новый? / да / нет</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>Hvor kommer du fra? / hvor</td><td>Откуда ты приехал? / где, куда</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>Hva gjør du? / gjør / kjører</td><td>Чем ты занимаешься? / делаешь / водишь</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>truck / takk / Hvem / dette er</td><td>погрузчик / спасибо / Кто / Это...</td></tr>
-                    <tr><td><span class="badge b-side">12-15</span></td><td>Hvem er dette? / ikke / hun / han</td><td>Кто это? / не / она / он</td></tr>
-
-                    <!-- Leksjon 2 (18-35) -->
-                    <tr><td><span class="badge b-side">18-19</span></td><td>står opp / halv / klokka</td><td>встает / половина / время (часы)</td></tr>
-                    <tr><td><span class="badge b-side">18-19</span></td><td>åtte / dusjer / spiser / frokost</td><td>восемь / принимает душ / ест / завтрак</td></tr>
-                    <tr><td><span class="badge b-side">18-19</span></td><td>går / til / ni</td><td>идет / на, к / девять</td></tr>
-                    <tr><td><span class="badge b-side">20-21</span></td><td>begynner / klassen / med / lærer</td><td>начинается / класс / с / учитель</td></tr>
-                    <tr><td><span class="badge b-side">20-21</span></td><td>unskyld / Kan du gjenta?</td><td>извини / Ты можешь повторить?</td></tr>
-                    <tr><td><span class="badge b-side">20-21</span></td><td>Kan du stave etternavnet ditt?</td><td>Можешь произнести фамилию по буквам?</td></tr>
-                    <tr><td><span class="badge b-side">22-25</span></td><td>forskjellige / land / de / når</td><td>различные / страна / они / когда</td></tr>
-                    <tr><td><span class="badge b-side">24-25</span></td><td>ved siden av / sitter / på kurset</td><td>рядом с / сидит / на курсах</td></tr>
-                    <tr><td><span class="badge b-side">24-25</span></td><td>fem dager i uka / slutter</td><td>пять дней в неделю / заканчивают</td></tr>
-                    <tr><td><span class="badge b-side">24-25</span></td><td>møter / bruker / skrive / lese</td><td>встречает / использует / писать / читать</td></tr>
-                    <tr><td><span class="badge b-side">26-27</span></td><td>PC / hører på / en / et eple</td><td>компьютер / слушают / артикль м.р. / яблоко</td></tr>
-                    <tr><td><span class="badge b-side">26-27</span></td><td>en kopp kaffe / en bolle / drikker</td><td>чашка кофе / булочка / пьет</td></tr>
-                    <tr><td><span class="badge b-side">28-29</span></td><td>Er du gift? / gift / mann min</td><td>Ты женат/замужем? / женат/замужем / мой муж</td></tr>
-                    <tr><td><span class="badge b-side">28-29</span></td><td>Har dere barn? / dere / vi / har</td><td>У вас есть дети? / вы / мы / иметь</td></tr>
-                    <tr><td><span class="badge b-side">28-29</span></td><td>din / drosje / taxi / betyr</td><td>твой / такси / такси / значит</td></tr>
-                    <tr><td><span class="badge b-side">28-29</span></td><td>nå / forstår / taxisjåfør</td><td>теперь / понимаю / таксист</td></tr>
-                    <tr><td><span class="badge b-side">30-31</span></td><td>etter / hjem / gjør lekser / går ut</td><td>после / домой / делает уроки / выходит</td></tr>
-                    <tr><td><span class="badge b-side">32-33</span></td><td>Røde kors / to ganger i uka / å</td><td>Красный крест / два раза в неделю / инфинитивная частица</td></tr>
-                    <tr><td><span class="badge b-side">34-35</span></td><td>hjelper / lære norsk / Hvordan går det?</td><td>помогает / учить норвежский / Как дела?</td></tr>
-                    <tr><td><span class="badge b-side">34-35</span></td><td>Hvordan / Det går bra / mye / elever</td><td>как / Всё в порядке / много / ученики</td></tr>
-                    <tr><td><span class="badge b-side">34-35</span></td><td>Hvilken/hvilket/hvilke / mandag-søndag</td><td>Какой/какое/какие / понедельник-воскресенье</td></tr>
-                    <tr><td><span class="badge b-side">34-35</span></td><td>helgene / fri / slapper av / sammen med</td><td>выходные / свободный / отдыхаю / вместе с</td></tr>
-                    <tr><td><span class="badge b-side">34-35</span></td><td>venner / i en time / Vi snakkes.</td><td>друзья / один час / Увидимся.</td></tr>
-
-                    <!-- Заметки с полей -->
-                    <tr><td><span class="badge b-side">Заметка</span></td><td>kler / klær (på)</td><td>одежда / одевать(ся)</td></tr>
-                    <tr><td><span class="badge b-side">Заметка</span></td><td>ligge / legge</td><td>лежать / положить (ложить)</td></tr>
-                    <tr><td><span class="badge b-side">Заметка</span></td><td>kantineassistent</td><td>помощник в столовой</td></tr>
-                </tbody>
-            </table>
-        </div>
+    <!-- ВКЛАДКИ -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('personer')">👥 Personer (1)</button>
+        <button class="tab-btn" onclick="switchTab('klokke')">🕒 Klokke & Rutiner (2)</button>
+        <button class="tab-btn" onclick="switchTab('skrive')">✍️ Skriveøvelse (Списывание)</button>
+        <button class="tab-btn" onclick="switchTab('grammatikk')">📐 Grammatikk (1 & 2)</button>
     </div>
 
-    <!-- TAB 2: FLASHCARDS -->
-    <div id="flashcards" class="tab-content">
-        <div class="card">
-            <h2>🎴 Карточки для запоминания слов (Кликните для перевода)</h2>
-            <div class="flashcards-grid">
-                <div class="flashcard" onclick="toggleCard(this, 'står opp', 'встает')">står opp</div>
-                <div class="flashcard" onclick="toggleCard(this, 'dusjer', 'принимает душ')">dusjer</div>
-                <div class="flashcard" onclick="toggleCard(this, 'spiser', 'ест')">spiser</div>
-                <div class="flashcard" onclick="toggleCard(this, 'slutter', 'заканчивает(ся)')">slutter</div>
-                <div class="flashcard" onclick="toggleCard(this, 'møter', 'встречает')">møter</div>
-                <div class="flashcard" onclick="toggleCard(this, 'forstår', 'понимает')">forstår</div>
-                <div class="flashcard" onclick="toggleCard(this, 'hjelper', 'помогает')">hjelper</div>
-                <div class="flashcard" onclick="toggleCard(this, 'kjører', 'водит (машину)')">kjører</div>
-                <div class="flashcard" onclick="toggleCard(this, 'ligge', 'лежать')">ligge</div>
-                <div class="flashcard" onclick="toggleCard(this, 'legge', 'класть / положить')">legge</div>
-                <div class="flashcard" onclick="toggleCard(this, 'klær', 'одежда')">klær</div>
-                <div class="flashcard" onclick="toggleCard(this, 'slapper av', 'отдыхает')">slapper av</div>
+    <!-- 1. ПЕРСОНАЖИ -->
+    <div id="personer" class="tab-content active">
+        <h2>Профиль персонажей учебника</h2>
+        <p>Укажите сведения о героях на основе материалов урока:</p>
+        <div class="grid">
+            <!-- Farid -->
+            <div class="card">
+                <h3>Farid Afram</h3>
+                <label>Возраст и место проживания:</label>
+                <select id="p_farid_alder">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">21 år, bor i Bergen</option>
+                    <option value="wrong">24 år, bor i Ålesund</option>
+                </select>
+                <label>Происхождение и язык:</label>
+                <select id="p_farid_land">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">Fra Syria, snakker arabisk</option>
+                    <option value="wrong">Fra Somalia, snakker somali</option>
+                </select>
+            </div>
+
+            <!-- Mali -->
+            <div class="card">
+                <h3>Mali Timkun Hansen</h3>
+                <label>Возраст и место проживания:</label>
+                <select id="p_mali_alder">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">24 år, bor i Bergen</option>
+                    <option value="wrong">38 år, bor i Norge</option>
+                </select>
+                <label>Происхождение и язык:</label>
+                <select id="p_mali_land">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">Fra Thailand, snakker thai og engelsk</option>
+                    <option value="wrong">Fra Polen, snakker polsk</option>
+                </select>
+            </div>
+
+            <!-- Halina -->
+            <div class="card">
+                <h3>Halina Dudek</h3>
+                <label>Возраст и происхождение:</label>
+                <select id="p_halina_info">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">38 år, fra Polen</option>
+                    <option value="wrong">55 år, fra Somalia</option>
+                </select>
+                <label>Занятость:</label>
+                <select id="p_halina_jobb">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">Går på norskkurs og jobber i kantine</option>
+                    <option value="wrong">Jobber på et lager</option>
+                </select>
+            </div>
+
+            <!-- Ali -->
+            <div class="card">
+                <h3>Ali Osman</h3>
+                <label>Возраст и происхождение:</label>
+                <select id="p_ali_info">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">55 år, fra Somalia</option>
+                    <option value="wrong">58 år, fra Ålesund</option>
+                </select>
+                <label>Место работы:</label>
+                <select id="p_ali_jobb">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">Jobber på et lager</option>
+                    <option value="wrong">Jobber i kantine</option>
+                </select>
+            </div>
+
+            <!-- Kåre -->
+            <div class="card">
+                <h3>Kåre Alnes</h3>
+                <label>Возраст и происхождение:</label>
+                <select id="p_kare_info">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">58 år, fra Norge (Ålesund)</option>
+                    <option value="wrong">21 år, fra Syria</option>
+                </select>
+                <label>Место работы:</label>
+                <select id="p_kare_jobb">
+                    <option value="">-- Выберите --</option>
+                    <option value="correct">Jobber på et lager</option>
+                    <option value="wrong">Går på norskkurs</option>
+                </select>
             </div>
         </div>
+        <button class="btn-check" onclick="checkPersoner()">Проверить персонажей</button>
+        <div id="personer_fb" class="feedback"></div>
     </div>
 
-    <!-- TAB 3: PERSONER -->
-    <div id="personer" class="tab-content">
-        <div class="card">
-            <h2>👥 Персонажи учебника HEI!</h2>
-            <div class="person-grid">
-                <div class="person-card">
-                    <h4>Halina Dudek</h4>
-                    <p><b>Polen</b> (Польша)</p>
-                    <p><b>Bor i:</b> Bergen</p>
-                    <p><b>Jobb:</b> Kantineassistent</p>
-                </div>
-                <div class="person-card">
-                    <h4>Farid Afram</h4>
-                    <p><b>Syria</b> (Сирия)</p>
-                    <p><b>Språk:</b> arabisk</p>
-                    <p><b>Går på:</b> norskkurs</p>
-                </div>
-                <div class="person-card">
-                    <h4>Mali Timkun</h4>
-                    <p><b>Thailand</b></p>
-                    <p><b>Språk:</b> thai</p>
-                    <p><b>Bor i:</b> Bergen</p>
-                </div>
-                <div class="person-card">
-                    <h4>Kåre og Ali</h4>
-                    <p><b>Kåre:</b> Norge / Drosjesjåfør</p>
-                    <p><b>Ali:</b> Afghanistan / Norskkurs</p>
-                    <p><b>Jobber:</b> Sammen på et lager</p>
-                </div>
+    <!-- 2. ЧАСЫ И РАСПОРЯДОК ДНЯ -->
+    <div id="klokke" class="tab-content">
+        <h2>🕒 Интерактивные часы и действия Фарида</h2>
+        <p>Установите время на интерактивных часах согласно тексту из Leksjon 2:</p>
+
+        <div class="grid">
+            <!-- Часы 1 -->
+            <div class="card clock-container">
+                <h3>1. "Han står opp klokka 07:00"</h3>
+                <svg id="clock1" class="clock" width="130" height="130" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" stroke="#333" stroke-width="3" fill="none"/>
+                    <line id="h1_hour" x1="50" y1="50" x2="50" y2="25" stroke="#0056b3" stroke-width="4" stroke-linecap="round"/>
+                    <line id="h1_min" x1="50" y1="50" x2="50" y2="15" stroke="#dc3545" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <label>Выберите время на часах:</label>
+                <input type="time" id="time_1" value="12:00" onchange="updateClock('clock1', this.value)">
+            </div>
+
+            <!-- Часы 2 -->
+            <div class="card clock-container">
+                <h3>2. "Han spiser frokost klokka 07:30 (halv åtte)"</h3>
+                <svg id="clock2" class="clock" width="130" height="130" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" stroke="#333" stroke-width="3" fill="none"/>
+                    <line id="h2_hour" x1="50" y1="50" x2="50" y2="25" stroke="#0056b3" stroke-width="4" stroke-linecap="round"/>
+                    <line id="h2_min" x1="50" y1="50" x2="50" y2="15" stroke="#dc3545" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <label>Выберите время на часах:</label>
+                <input type="time" id="time_2" value="12:00" onchange="updateClock('clock2', this.value)">
+            </div>
+
+            <!-- Часы 3 -->
+            <div class="card clock-container">
+                <h3>3. "Kurset begynner klokka 09:00"</h3>
+                <svg id="clock3" class="clock" width="130" height="130" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" stroke="#333" stroke-width="3" fill="none"/>
+                    <line id="h3_hour" x1="50" y1="50" x2="50" y2="25" stroke="#0056b3" stroke-width="4" stroke-linecap="round"/>
+                    <line id="h3_min" x1="50" y1="50" x2="50" y2="15" stroke="#dc3545" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <label>Выберите время на часах:</label>
+                <input type="time" id="time_3" value="12:00" onchange="updateClock('clock3', this.value)">
             </div>
         </div>
+        <button class="btn-check" onclick="checkClocks()">Проверить время</button>
+        <div id="clock_fb" class="feedback"></div>
     </div>
 
-    <!-- TAB 4: TEKSTER -->
-    <div id="tekster" class="tab-content">
+    <!-- 3. ТРЕНАЖЕР СПИСЫВАНИЯ СЛОВ -->
+    <div id="skrive" class="tab-content">
+        <h2>✍️ Практика письменного ввода (Списывание)</h2>
+        <p>Спишите точь-в-точь норвежские слова и фразы с карточек учебника для запоминания орфографии:</p>
+
         <div class="card">
-            <h2>📖 Диалоги и тексты (Leksjon 1 & 2)</h2>
-            <div class="dialogue-box">
-                <h3>Диалог 1: Знакомство</h3>
-                <div class="dialogue-line"><span class="speaker">Kåre:</span> Er du ny her?</div>
-                <span class="trans">Ты здесь новый?</span>
-                <div class="dialogue-line"><span class="speaker">Halina:</span> Ja, jeg er ny her. Hva heter du?</div>
-                <span class="trans">Да, я здесь новая. Как тебя зовут?</span>
-                <div class="dialogue-line"><span class="speaker">Kåre:</span> Jeg heter Kåre. Bor du i Bergen?</div>
-                <span class="trans">Меня зовут Коре. Ты живешь в Бергене?</span>
+            <div class="write-practice">
+                <strong>Образец:</strong> <code>en deltaker</code> (участник)
             </div>
+            <label>Перепишите слово:</label>
+            <input type="text" id="w_1" placeholder="Напишите здесь: en deltaker">
 
-            <div class="dialogue-box">
-                <h3>Текст: Farids dag</h3>
-                <p>Farid står opp klokka sju. Han dusjer, spiser frokost og går til kurset. Kurset begynner klokka ni. На курсе Farid skriver og leser norsk.</p>
-                <hr>
-                <span class="trans">Фарид встает в 7 часов. Он принимает душ, завтракает и идет на курс. Курс начинается в 9:00. На курсе Фарид пишет и читает по-норвежски.</span>
+            <div class="write-practice">
+                <strong>Образец:</strong> <code>et viskelær</code> (ластик)
             </div>
+            <label>Перепишите слово:</label>
+            <input type="text" id="w_2" placeholder="Напишите здесь: et viskelær">
+
+            <div class="write-practice">
+                <strong>Образец:</strong> <code>Han står opp. Han dusjer.</code> (Он встает. Он принимает душ.)
+            </div>
+            <label>Перепишите предложение:</label>
+            <input type="text" id="w_3" placeholder="Напишите здесь: Han står opp. Han dusjer.">
+
+            <div class="write-practice">
+                <strong>Образец:</strong> <code>Farid skriver og leser norsk.</code>
+            </div>
+            <label>Перепишите предложение:</label>
+            <input type="text" id="w_4" placeholder="Напишите здесь: Farid skriver og leser norsk.">
         </div>
+        <button class="btn-check" onclick="checkWriting()">Проверить написание</button>
+        <div id="write_fb" class="feedback"></div>
     </div>
 
-    <!-- TAB 5: GRAMMATIKK -->
+    <!-- 4. ГРАММАТИКА -->
     <div id="grammatikk" class="tab-content">
-        <div class="card">
-            <h2>💡 Грамматика и Заметки с полей</h2>
-            
-            <div class="rule-box">
-                <h3>1. Вопросительные слова (Spørreord)</h3>
-                <ul>
-                    <li><b>Hva:</b> как / что (what?)</li>
-                    <li><b>Hvor:</b> откуда / где (where?)</li>
-                    <li><b>Hvem:</b> кто? (who?)</li>
-                    <li><b>Hvordan:</b> как? / каким образом?</li>
-                    <li><b>Hvilken / Hvilket / Hvilke:</b> какой / какое / какие?
-                        <br>&bull; <i>Hvilken dag?</i> (m.r. / ж.р.)
-                        <br>&bull; <i>Hvilket kurs?</i> (ср. р.)
-                        <br>&bull; <i>Hvilke dager?</i> (мн. ч.)
-                    </li>
-                </ul>
-            </div>
+        <h2>📐 Грамматика (Leksjon 1 & 2)</h2>
 
-            <div class="rule-box">
-                <h3>2. Важное различие слов (из рукописных заметок)</h3>
-                <ul>
-                    <li><b>Ligge vs. Legge:</b>
-                        <br>&bull; <i>ligge</i> — лежать (находиться в горизонтальном положении)
-                        <br>&bull; <i>legge</i> — класть / ложить (действие)
-                    </li>
-                    <li><b>Klær vs. Kler:</b>
-                        <br>&bull; <i>klær</i> (существительное) — одежда
-                        <br>&bull; <i>kler (på)</i> (глагол) — одевать(ся)
-                    </li>
-                </ul>
+        <!-- Артикли -->
+        <div class="card">
+            <h3>1. Substantiv: Артикли (en, ei, et)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+                <div>
+                    <label>___ blyant</label>
+                    <select id="g_art_blyant">
+                        <option value="">--</option>
+                        <option value="en">en</option>
+                        <option value="ei">ei</option>
+                        <option value="et">et</option>
+                    </select>
+                </div>
+                <div>
+                    <label>___ veske</label>
+                    <select id="g_art_veske">
+                        <option value="">--</option>
+                        <option value="en">en</option>
+                        <option value="ei">ei / en</option>
+                        <option value="et">et</option>
+                    </select>
+                </div>
+                <div>
+                    <label>___ viskelær</label>
+                    <select id="g_art_viskelaer">
+                        <option value="">--</option>
+                        <option value="en">en</option>
+                        <option value="ei">ei</option>
+                        <option value="et">et</option>
+                    </select>
+                </div>
+                <div>
+                    <label>___ språk</label>
+                    <select id="g_art_sprak">
+                        <option value="">--</option>
+                        <option value="en">en</option>
+                        <option value="ei">ei</option>
+                        <option value="et">et</option>
+                    </select>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- TAB 6: ARBEIDSBOK -->
-    <div id="arbeidsbok" class="tab-content">
+        <!-- Порядок слов -->
         <div class="card">
-            <h2>✍️ Упражнения из рабочей тетради</h2>
-            
-            <div class="quiz-q">
-                <p>1. Переведите фразы с правильным словом (ligge / legge): «Книга лежит на столе»</p>
-                <input type="text" id="ex_1" class="input-box" placeholder="Напишите по-норвежски: Boka ligger på bordet.">
-                <button class="btn" onclick="checkEx('ex_1', 'Boka ligger på bordet.', 'fb_1')">Проверить</button>
-                <div id="fb_1" class="feedback"></div>
-            </div>
+            <h3>2. Ordstilling (Глагол ВСЕГДА на 2-м месте)</h3>
+            <label>Утвердительное предложение (Kåre / bor / i Bergen):</label>
+            <select id="g_ord_1">
+                <option value="">-- Выберите --</option>
+                <option value="wrong">Kåre i Bergen bor.</option>
+                <option value="correct">Kåre bor i Bergen.</option>
+            </select>
 
-            <div class="quiz-q">
-                <p>2. Задайте вопрос: «Откуда ты приехал?»</p>
-                <input type="text" id="ex_2" class="input-box" placeholder="Hvor ...">
-                <button class="btn" onclick="checkEx('ex_2', 'Hvor kommer du fra?', 'fb_2')">Проверить</button>
-                <div id="fb_2" class="feedback"></div>
-            </div>
+            <label>Вопрос с вопросительным словом (Hvor / du / kommer / fra?):</label>
+            <select id="g_ord_2">
+                <option value="">-- Выберите --</option>
+                <option value="wrong">Hvor du kommer fra?</option>
+                <option value="correct">Hvor kommer du fra?</option>
+            </select>
         </div>
-    </div>
 
-</main>
+        <!-- Глаголы -->
+        <div class="card">
+            <h3>3. Verb fra Leksjon 2 (Выберите верный глагол)</h3>
+            <label>Farid ___ norsk på kurset. (пишет)</label>
+            <select id="g_verb_1">
+                <option value="">-- Выберите --</option>
+                <option value="correct">skriver</option>
+                <option value="wrong">dusjer</option>
+            </select>
+
+            <label>Han ___ frokost klokka 07:30. (кушает)</label>
+            <select id="g_verb_2">
+                <option value="">-- Выберите --</option>
+                <option value="correct">spiser</option>
+                <option value="wrong">går</option>
+            </select>
+        </div>
+
+        <button class="btn-check" onclick="checkGrammar()">Проверить грамматику</button>
+        <div id="grammar_fb" class="feedback"></div>
+    </div>
+</div>
 
 <script>
-    function openTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    // Переключение вкладок
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
         document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
+        event.target.classList.add('active');
     }
 
-    function toggleCard(card, original, translation) {
-        if (card.classList.contains('flipped')) {
-            card.innerText = original;
-            card.classList.remove('flipped');
-        } else {
-            card.innerText = translation;
-            card.classList.add('flipped');
+    // Обновление стрелок SVG часов при изменении input time
+    function updateClock(clockId, timeValue) {
+        if (!timeValue) return;
+        const [hours, minutes] = timeValue.split(':').map(Number);
+        
+        const hourAngle = (hours % 12 + minutes / 60) * 30;
+        const minAngle = minutes * 6;
+
+        const hourHand = document.querySelector(`#${clockId} [id$='_hour']`);
+        const minHand = document.querySelector(`#${clockId} [id$='_min']`);
+
+        if (hourHand && minHand) {
+            hourHand.setAttribute('transform', `rotate(${hourAngle} 50 50)`);
+            minHand.setAttribute('transform', `rotate(${minAngle} 50 50)`);
         }
     }
 
-    function filterDict() {
-        let input = document.getElementById("dictSearch").value.toLowerCase();
-        let rows = document.querySelectorAll("#dictTable tbody tr");
+    // Инициализация часов на 12:00
+    window.onload = function() {
+        updateClock('clock1', '12:00');
+        updateClock('clock2', '12:00');
+        updateClock('clock3', '12:00');
+    };
 
-        rows.forEach(row => {
-            let text = row.innerText.toLowerCase();
-            row.style.display = text.includes(input) ? "" : "none";
-        });
+    // Проверка персонажей
+    function checkPersoner() {
+        const ids = ['p_farid_alder', 'p_farid_land', 'p_mali_alder', 'p_mali_land', 'p_halina_info', 'p_halina_jobb', 'p_ali_info', 'p_ali_jobb', 'p_kare_info', 'p_kare_jobb'];
+        let correct = ids.filter(id => document.getElementById(id).value === 'correct').length;
+        
+        const fb = document.getElementById('personer_fb');
+        if (correct === ids.length) {
+            fb.style.color = 'var(--success)';
+            fb.innerText = `🎉 Отлично! Все ${correct} из ${ids.length} фактов о персонажах угаданы верно!`;
+        } else {
+            fb.style.color = 'var(--danger)';
+            fb.innerText = `❌ Правильно: ${correct} из ${ids.length}. Проверьте еще раз данные персонажей.`;
+        }
     }
 
-    function checkEx(inputId, correct, feedbackId) {
-        const val = document.getElementById(inputId).value.trim();
-        const fb = document.getElementById(feedbackId);
-        if (val.toLowerCase() === correct.toLowerCase()) {
-            fb.innerHTML = "✅ Отлично! Всё верно.";
-            fb.className = "feedback correct";
+    // Проверка часов
+    function checkClocks() {
+        const t1 = document.getElementById('time_1').value;
+        const t2 = document.getElementById('time_2').value;
+        const t3 = document.getElementById('time_3').value;
+
+        let score = 0;
+        if (t1 === "07:00") score++;
+        if (t2 === "07:30") score++;
+        if (t3 === "09:00") score++;
+
+        const fb = document.getElementById('clock_fb');
+        if (score === 3) {
+            fb.style.color = 'var(--success)';
+            fb.innerText = '🎉 Все стрелки выставлены идеально точно!';
         } else {
-            fb.innerHTML = "❌ Ошибка. Правильно: <b>" + correct + "</b>";
-            fb.className = "feedback incorrect";
+            fb.style.color = 'var(--danger)';
+            fb.innerText = `❌ Верно выставлено часов: ${score} из 3. (Подсказка: 07:00, 07:30, 09:00).`;
+        }
+    }
+
+    // Проверка самостоятельного списания
+    function checkWriting() {
+        const w1 = document.getElementById('w_1').value.trim();
+        const w2 = document.getElementById('w_2').value.trim();
+        const w3 = document.getElementById('w_3').value.trim();
+        const w4 = document.getElementById('w_4').value.trim();
+
+        let score = 0;
+        if (w1 === "en deltaker") score++;
+        if (w2 === "et viskelær") score++;
+        if (w3 === "Han står opp. Han dusjer.") score++;
+        if (w4 === "Farid skriver og leser norsk.") score++;
+
+        const fb = document.getElementById('write_fb');
+        if (score === 4) {
+            fb.style.color = 'var(--success)';
+            fb.innerText = '🎉 Безупречно! Все фразы и слова переписаны без ошибок!';
+        } else {
+            fb.style.color = 'var(--danger)';
+            fb.innerText = `❌ Верно: ${score} из 4. Проверьте заглавные буквы и букву æ/å.`;
+        }
+    }
+
+    // Проверка грамматики
+    function checkGrammar() {
+        let score = 0;
+        if (document.getElementById('g_art_blyant').value === 'en') score++;
+        if (document.getElementById('g_art_veske').value === 'ei') score++;
+        if (document.getElementById('g_art_viskelaer').value === 'et') score++;
+        if (document.getElementById('g_art_sprak').value === 'et') score++;
+        if (document.getElementById('g_ord_1').value === 'correct') score++;
+        if (document.getElementById('g_ord_2').value === 'correct') score++;
+        if (document.getElementById('g_verb_1').value === 'correct') score++;
+        if (document.getElementById('g_verb_2').value === 'correct') score++;
+
+        const fb = document.getElementById('grammar_fb');
+        if (score === 8) {
+            fb.style.color = 'var(--success)';
+            fb.innerText = '🎉 Все грамматические упражнения выполнены верно!';
+        } else {
+            fb.style.color = 'var(--danger)';
+            fb.innerText = `❌ Верно: ${score} из 8. Проверьте правила Leksjon 1 и 2.`;
         }
     }
 </script>
